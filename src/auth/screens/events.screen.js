@@ -8,7 +8,7 @@ import moment from 'moment/min/moment-with-locales.min';
 import { LoadingUserListItem, UserListItem, ViewContainer } from 'components';
 import { colors, fonts, normalize } from 'config';
 import { emojifyText, translate } from 'utils';
-import { getUserEvents } from '../auth.action';
+import { getUserEvents, getUser } from 'auth';
 
 const mapStateToProps = state => ({
   user: state.auth.user,
@@ -18,6 +18,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  getUserByDispatch: () => dispatch(getUser()),
   getUserEvents: user => dispatch(getUserEvents(user)),
 });
 
@@ -70,6 +71,8 @@ const styles = StyleSheet.create({
 
 class Events extends Component {
   componentDidMount() {
+    this.props.getUserByDispatch();
+
     if (this.props.user.login) {
       this.getUserEvents(this.props.user);
     }
@@ -488,9 +491,7 @@ class Events extends Component {
         >
           {userEvent.actor.login}{' '}
         </Text>
-        <Text>
-          {this.getAction(userEvent)}{' '}
-        </Text>
+        <Text>{this.getAction(userEvent)} </Text>
         {this.getItem(userEvent)}
         {this.getAction(userEvent) && ' '}
         {this.getConnector(userEvent)}
@@ -530,7 +531,7 @@ class Events extends Component {
           onRefresh={this.getUserEvents}
           refreshing={isPendingEvents}
           keyExtractor={this.keyExtractor}
-          renderItem={({ item }) =>
+          renderItem={({ item }) => (
             <View>
               <UserListItem
                 user={item.actor}
@@ -546,24 +547,25 @@ class Events extends Component {
               />
 
               {(item.type === 'IssueCommentEvent' ||
-                item.type === 'PullRequestReviewCommentEvent') &&
-                <View style={styles.subtitleContainer}>
-                  <Text numberOfLines={3} style={styles.subtitle}>
-                    {emojifyText(
-                      item.payload.comment.body.replace(linebreaksPattern, ' ')
-                    )}
-                  </Text>
-                </View>}
-            </View>}
+                item.type === 'PullRequestReviewCommentEvent') && (
+                  <View style={styles.subtitleContainer}>
+                    <Text numberOfLines={3} style={styles.subtitle}>
+                      {emojifyText(
+                        item.payload.comment.body.replace(
+                          linebreaksPattern,
+                          ' '
+                        )
+                      )}
+                    </Text>
+                  </View>
+                )}
+            </View>
+          )}
         />
       );
     }
 
-    return (
-      <ViewContainer>
-        {content}
-      </ViewContainer>
-    );
+    return <ViewContainer>{content}</ViewContainer>;
   }
 }
 

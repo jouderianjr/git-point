@@ -95,7 +95,24 @@ class App extends Component {
 
     return (
       <Provider store={configureStore}>
-        <GitPoint onNavigationStateChange={null} />
+        <GitPoint
+          onNavigationStateChange={(prev, next) => {
+            const { dispatch } = configureStore;
+
+            if (next.routes[0].routeName === 'Main') {
+              switch (next.routes[0].index) {
+                case 1:
+                  dispatch({ type: 'ROUTE_CHANGE_NOTIFICATION' });
+                  break;
+                case 3:
+                  dispatch({ type: 'ROUTE_CHANGE_PROFILE' });
+                  break;
+                default:
+                  break;
+              }
+            }
+          }}
+        />
       </Provider>
     );
   }
