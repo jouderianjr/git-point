@@ -14,12 +14,20 @@
 .*/Libraries/react-native/React.js
 .*/Libraries/react-native/ReactNative.js
 
+; Ignore some modules
+.*/node_modules/react-navigation/.*
+.*/node_modules/react-native/.*
+.*/node_modules/react-native-tab-view/.*
+.*/node_modules/rn-app-intro/.*
+.*node_modules/mitt/.*
+
 [include]
 
 [libs]
 node_modules/react-native/Libraries/react-native/react-native-interface.js
 node_modules/react-native/flow
 flow/
+flow-typed
 
 [options]
 module.system.node.resolve_dirname=node_modules
