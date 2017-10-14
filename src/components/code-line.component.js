@@ -70,13 +70,13 @@ export class CodeLine extends Component {
     filename: string,
   };
 
-  isKnownType(language) {
+  isKnownType(language: string) {
     return language && getLanguage(language) && !this.props.newChunk;
   }
 
   render() {
     const { newChunk, change, filename } = this.props;
-    const language = (filename || []).split('.').pop();
+    const language = filename.split('.').pop();
     // SyntaxHighlighter doesn't allow Stylesheet class style
     const customStyle = {
       backgroundColor: 'transparent',
@@ -118,12 +118,15 @@ export class CodeLine extends Component {
               change.type === 'del' && styles.delLine,
             ]}
           >
-            {(newChunk || !this.isKnownType(language)) &&
-              <Text style={[styles.codeLine, newChunk && styles.newChunkLine]}>
-                {change.content}
-              </Text>}
+            {(newChunk || !this.isKnownType(language)) && (
+                <Text
+                  style={[styles.codeLine, newChunk && styles.newChunkLine]}
+                >
+                  {change.content}
+                </Text>
+              )}
 
-            {this.isKnownType(language) &&
+            {this.isKnownType(language) && (
               <SyntaxHighlighter
                 language={language}
                 style={GithubStyle}
@@ -134,7 +137,8 @@ export class CodeLine extends Component {
                 fontSize={styles.codeLine.fontSize}
               >
                 {change.content}
-              </SyntaxHighlighter>}
+              </SyntaxHighlighter>
+            )}
           </View>
         </View>
       </View>

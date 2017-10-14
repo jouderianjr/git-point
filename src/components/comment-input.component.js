@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
 
 export class CommentInput extends Component {
   props: {
-    users: Array,
+    users: Array<Object>,
     userHasPushPermission: boolean,
     issueLocked: boolean,
     language: string,
@@ -102,7 +102,7 @@ export class CommentInput extends Component {
           users={users}
         />
         <View style={styles.wrapper}>
-          {userCanPost &&
+          {userCanPost && (
             <TextInput
               underlineColorAndroid={'transparent'}
               placeholder={
@@ -123,18 +123,20 @@ export class CommentInput extends Component {
                 { height: Math.max(30, this.state.height) },
               ]}
               value={this.state.text}
-            />}
+            />
+          )}
 
-          {!userCanPost &&
+          {!userCanPost && (
             <Text style={[styles.textInput, { color: colors.grey }]}>
               {translate('issue.main.lockedIssue', language)}
-            </Text>}
+            </Text>
+          )}
 
-          {userCanPost &&
+          {userCanPost && (
             <TouchableOpacity
               disabled={this.state.text === ''}
               style={styles.postButtonContainer}
-              onPress={() => this.handleSubmit(this.state.text)}
+              onPress={() => this.handleSubmit()}
             >
               <Icon
                 name="send"
@@ -144,13 +146,15 @@ export class CommentInput extends Component {
                     : styles.postButtonEnabled
                 }
               />
-            </TouchableOpacity>}
+            </TouchableOpacity>
+          )}
 
           {!userCanPost &&
-            this.props.issueLocked &&
-            <View style={styles.postButtonContainer}>
-              <Icon name="lock" type="octicon" color={colors.grey} />
-            </View>}
+            this.props.issueLocked && (
+              <View style={styles.postButtonContainer}>
+                <Icon name="lock" type="octicon" color={colors.grey} />
+              </View>
+            )}
         </View>
       </View>
     );
